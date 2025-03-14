@@ -1,0 +1,6 @@
+@SPG_Fachtheorie.Aufgabe3_HostAddress = http://localhost:5229
+
+GET {{SPG_Fachtheorie.Aufgabe3_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
