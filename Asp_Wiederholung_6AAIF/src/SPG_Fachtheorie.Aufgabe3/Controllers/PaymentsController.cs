@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;       // Für Include() und FirstOrDefaultA
 using SPG_Fachtheorie.Aufgabe1.Infrastructure; // dein DbContext (AppointmentContext)
 using SPG_Fachtheorie.Aufgabe1.Model;
 using SPG_Fachtheorie.Aufgabe3.Dtos;
+using SPG_Fachtheorie.Aufgabe3.Commands;
 using System.Net; // optional, wenn du HttpStatusCode nutzt
 
 namespace SPG_Fachtheorie.Aufgabe3.Controllers
@@ -166,8 +167,75 @@ namespace SPG_Fachtheorie.Aufgabe3.Controllers
             
             return NoContent();
         }
+
+        [HttpPut("paymentItems/{id}")]
+        public async Task<IActionResult> UpdatePaymentItem(int id, [FromBody] UpdatePaymentItemCommand command)
+        {
+            if (id != command.Id)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.BadRequest,
+                    detail: "Invalid payment item ID");
+            }
+
+            var paymentItem = await _db.PaymentItems
+                .Include(p => p.Payment)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (paymentItem == null)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.NotFound,
+                    detail: "Payment Item not found");
+            }
+
+            var payment = await _db.Payments.FindAsync(command.PaymentId);
+            if (payment == null)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.BadRequest,
+                    detail: "Invalid payment ID");
+            }
+
+            if (paymentItem.LastUpdated != command.LastUpdated)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.BadRequest,
+                    detail: "Payment item has changed");
+            }
+
+            paymentItem.ArticleName = command.ArticleName;
+            paymentItem.Amount = command.Amount;
+            paymentItem.Price = command.Price;
+            paymentItem.Payment = payment;
+            paymentItem.LastUpdated = DateTime.Now;
+
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdatePaymentConfirmation(int id, [FromBody] UpdateConfirmedCommand command)
+        {
+            var payment = await _db.Payments.FindAsync(id);
+            
+            if (payment == null)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.NotFound,
+                    detail: "Payment not found");
+            }
+
+            if (payment.Confirmed != null)
+            {
+                return Problem(
+                    statusCode: (int)HttpStatusCode.BadRequest,
+                    detail: "Payment already confirmed");
+            }
+
+            payment.Confirmed = command.Confirmed;
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
     }
-
-
-
 }
