@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace SPG_Fachtheorie.Aufgabe1.Model
 {
@@ -13,6 +14,7 @@ namespace SPG_Fachtheorie.Aufgabe1.Model
             Amount = amount;
             Price = price;
             Payment = payment;
+            LastUpdated = null;
         }
 
         public int Id { get; set; }
@@ -21,5 +23,6 @@ namespace SPG_Fachtheorie.Aufgabe1.Model
         public int Amount { get; set; }
         public decimal Price { get; set; }
         public Payment Payment { get; set; }
+        public DateTime? LastUpdated { get; set; }
     }
 }

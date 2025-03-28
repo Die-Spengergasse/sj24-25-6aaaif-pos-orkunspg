@@ -14,6 +14,7 @@ namespace SPG_Fachtheorie.Aufgabe1.Model
             PaymentDateTime = paymentDateTime;
             Employee = employee;
             PaymentType = paymentType;
+            Confirmed = null;
         }
 
         public int Id { get; set; }
@@ -22,5 +23,6 @@ namespace SPG_Fachtheorie.Aufgabe1.Model
         public Employee Employee { get; set; }
         public PaymentType PaymentType { get; set; }
         public List<PaymentItem> PaymentItems { get; set; } = new();
+        public DateTime? Confirmed { get; set; }
     }
 }
