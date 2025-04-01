@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SPG_Fachtheorie.Aufgabe1.Infrastructure;
+using SPG_Fachtheorie.Aufgabe1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<AppointmentContext>(opt =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<PaymentService>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();   // Wird mit http zugegriffen, wird auf https weitergeleitet.
@@ -34,6 +37,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // Request pipeline
-app.MapControllers();  // Passt ein Controller zur Adresse? Ja: Diesen ausführen.
+app.MapControllers();  // Passt ein Controller zur Adresse? Ja: Diesen ausfï¿½hren.
 app.Run();
 
