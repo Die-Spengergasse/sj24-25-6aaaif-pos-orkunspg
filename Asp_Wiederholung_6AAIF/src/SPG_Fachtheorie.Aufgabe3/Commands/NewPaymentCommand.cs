@@ -1,18 +1,18 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class NewPaymentCommand
+namespace SPG_Fachtheorie.Aufgabe3.Commands
 {
-    [Required]
-    public int CashDeskNumber { get; set; }
+    public class NewPaymentCommand
+    {
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Cash desk number must be greater than 0")]
+        public int CashDeskNumber { get; set; }
 
-    [Required]
-    [DataType(DataType.DateTime)]
-    public DateTime PaymentDateTime { get; set; }
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Employee registration number must be greater than 0")]
+        public int EmployeeRegistrationNumber { get; set; }
 
-    [Required]
-    public string PaymentType { get; set; }
-
-    [Required]
-    public int EmployeeRegistrationNumber { get; set; }
+        [Required]
+        public string PaymentType { get; set; } = string.Empty;
+    }
 }
